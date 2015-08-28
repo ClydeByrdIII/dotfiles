@@ -1,0 +1,10 @@
+[push]
+	default = simple
+[user]
+	name = Clyde Byrd III
+	email = clydebyrdiii@yahoo.com
+[core]
+	autocrlf = input
+	safecrlf = true
+	editor = vim
+	excludesfile = ~/.gitignore_global
