@@ -1,18 +1,5 @@
-" Description: A minimal, but feature rich, example .vimrc. If you are a
-"              newbie, basing your first .vimrc on this file is a good choice.
-"              If you're a more advanced user, building your own .vimrc based
-"              on this file is still a good idea.
-"              Lots of options set via lots of good ideas found on the web
-"
-
-"------------------------------------------------------------
-" Features {{{1
-"
-" These options and commands enable some very useful features in Vim, that
-" no user should have to live without.
-"
-" Now any plugins you wish to install can be extracted to a subdirectory under
-" ~/.vim/bundle
+"--------------------------------------------------------------------
+" Features
 
 if has ("win32")
     set runtimepath+=$HOME/vimfiles/bundle/
@@ -24,6 +11,25 @@ endif
 " plugins under the ~/.vim/bundle directory
 call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
+
+"--------------------------------------------------------------------
+" Usability options
+
+" One such option is the 'hidden' option, which allows you to re-use the same
+" window and switch from an unsaved buffer without saving it first. Also allows
+" you to keep an undo history for multiple files when re-using the same window
+" in this way. Note that using persistent undo also lets you undo in multiple
+" files even in the same window, but is less efficient and is actually designed
+" for keeping undo history after closing Vim entirely. Vim will complain if you
+" try to quit without saving, and swap files will keep you safe if your computer
+" crashes.
+set hidden
+
+" Better command-line completion
+set wildmenu
+
+" Don't create ~filename backups
+set nobackup
 
 " Set 'nocompatible' to ward off unexpected things that your distro might
 " have made, as well as sanely reset options when re-sourcing .vimrc
@@ -37,53 +43,8 @@ filetype indent plugin on
 " Enable syntax highlighting
 syntax on
 
-" Allows saving of commands when you forget to use sudo Vim with a W. 
-" utilizes tee hack, for more about tee, "man tee"
-command! W w !sudo tee % > /dev/null
-" allows M$ commands like Copy/paste keyboard shortcuts
-behave mswin 
-
-"------------------------------------------------------------
-" Must have options {{{1
-"
-" These are highly recommended options.
-
-" Vim with default settings does not allow easy switching between multiple files
-" in the same editor window. Users can use multiple split windows or multiple
-" tab pages to edit multiple files, but it is still best to enable an option to
-" allow easier switching between files.
-"
-" One such option is the 'hidden' option, which allows you to re-use the same
-" window and switch from an unsaved buffer without saving it first. Also allows
-" you to keep an undo history for multiple files when re-using the same window
-" in this way. Note that using persistent undo also lets you undo in multiple
-" files even in the same window, but is less efficient and is actually designed
-" for keeping undo history after closing Vim entirely. Vim will complain if you
-" try to quit without saving, and swap files will keep you safe if your computer
-" crashes.
-set hidden
-
-
-" Note that not everyone likes working this way (with the hidden option).
-" Alternatives include using tabs or split windows instead of re-using the same
-" window as mentioned above, and/or either of the following options:
-" set confirm
-" set autowriteall
-
-" Better command-line completion
-set wildmenu
-
-" don't create ~filename backups, very annoying to leave this on and find dozens of extra files scattered about
-set nobackup
-
-
-"------------------------------------------------------------
-" Usability options {{{1
-"
-" These are options that users frequently set in their .vimrc. Some of them
-" change Vim's behaviour in ways which deviate from the true Vi way, but
-" which are considered to add usability. Which, if any, of these options to
-" use is very much a personal preference, but they are harmless.
+" Allows M$ commands like Copy/paste keyboard shortcuts
+behave mswin
 
 " Use case insensitive search, except when using capital letters
 set ignorecase
@@ -124,11 +85,13 @@ set t_vb=
 set mouse=a
 imap <ScrollWheelUp> <C-Y>
 map <ScrollWheelDown> <C-E>
-set selectmode-=mouse "Use the mouse just like visual mode, so you can use vim commands on mouse selections, eg. 'x' to cut and 'y' to yank
 
-"This is if you have a dark background in your terminal, light is another option 
+" Use the mouse just like visual mode, so you can use vim commands on mouse
+" selections, eg. 'x' to cut and 'y' to yank
+set selectmode-=mouse
+
+"This is if you have a dark background in your terminal
 set background=dark
-"set background=light
 
 " Set the command window height to 2 lines, to avoid many cases of having to
 " "press <Enter> to continue"
@@ -140,39 +103,34 @@ set number
 " Quickly time out on keycodes, but never time out on mappings
 set notimeout ttimeout ttimeoutlen=200
 
-" Use <F11> to toggle between 'paste' and 'nopaste'
-set pastetoggle=<F11>
+" Don't wrap lines longer than the screen's width
+set nowrap
 
-set nowrap " don't wrap lines longer than the screen's width
+" Show bottom scrollbar when in gvim
+set guioptions+=b 
 
-set guioptions+=b " show bottom scrollbar when in gvim
+" Fold code based on indents
+set foldmethod=indent
 
-set foldmethod=indent " fold code based on indents
+" Makes sure the code is not folded when first opened, used 
+set nofoldenable
 
-set nofoldenable " makes sure the code is not folded when first opened, used 
+" Keep 4 lines at minimum above & below the cursor when scrolling around a file
+set scrolloff=4
 
-set scrolloff=4 " Keep 4 lines at minimum above & below the cursor when scrolling around a file
+" Jumps to the other bracket
+set showmatch 
 
-set showmatch " Jumps to the other bracket
-
-"These options are personal preference
-
-set cursorline "Underline the current line the cursor is on.
+" Underline the current line the cursor is on.
+set cursorline
 
 set incsearch ignorecase hlsearch
 
-" Press space to clear search highlighting and any message already displayed.
-nnoremap <silent> <Space> :silent noh<Bar>echo<CR>
-
-"Upgrade the status line to give more usefull information
+" Upgrade the status line to give more usefull information
 set statusline=%F\ %m%r%w%y\ %=(%L\ loc)\ [#\%03.3b\ 0x\%02.2B]\ \ %l,%v\ \
 
-"Printing (:hardcopy) options
-set printoptions=paper:letter,syntax:y,number:y,duplex:off,left:5pc
 "------------------------------------------------------------
-" Indentation options {{{1
-"
-" Indentation settings according to personal preference.
+" Indentation options
 
 " Indentation settings for using 4 spaces instead of tabs.
 " Do not change 'tabstop' from its default value of 8 with this setup.
@@ -183,55 +141,51 @@ set softtabstop=4
 
 set expandtab
 
-" Indentation settings for using hard tabs for indent. Display tabs as
-" two characters wide.
-"set shiftwidth=2
-"set tabstop=2
-
-
-"------------------------------------------------------------
-" Mappings {{{1
-"
-" Useful mappings
+"--------------------------------------------------------------------
+" Mappings
 
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
 " which is the default
 map Y y$
 
-" Map <C-L> (redraw screen) to also turn off search highlighting until the
-" next search
-nnoremap <C-L> :nohl<CR><C-L>
-
-" toggle pasting on and off
+" Toggle pasting on and off
 set pastetoggle=<F2>
 
+" Press space to clear search highlighting and any message already displayed.
+nnoremap <silent> <Space> :silent noh<Bar>echo<CR>
 
-"------------------------------------------------------------
-" Colors {{{1
+" Trouble with the backspace character? try uncommenting these
+"imap <C-?> <BS>
+"imap <C-H> <BS>
+"inoremap <BS>
 
+" Support for Gundo, a visual & mini tree structure of document changes
+nnoremap <F5> :GundoToggle<CR>
 
+"--------------------------------------------------------------------
+" Colors
 
-" if terminal supports 256 coloring
+" If terminal supports 256 coloring
 if &term =~ "xterm-256color"
-    "For bright monitors, 'ir-black' is nice to the eyes, enable 256 mode an
+    " For bright monitors, 'ir-black' is nice to the eyes, enable 256 mode an
     colorscheme ir_black
 endif
 
-" if xterm, assume color is OK; btw =~ means ignore case and also somehow
+" If xterm, assume color is OK; btw =~ means ignore case and also somehow
 " xterm-256color was still being caught by it  
 if &term == "xterm" || &term == "xterm-color"
     set t_Co=8
-    "Tell vim it's ok to send color
+    " Tell vim it's ok to send color
     if &term =~ "xterm"
         set term=xterm-color
     endif
-    "All around well balanced colorscheme
+    " All around well balanced colorscheme
     "  colorscheme ron
-    "For med-dark monitors 'ron' or 'koehler' colorschemes are great
+    " For med-dark monitors 'ron' or 'koehler' colorschemes are great
      colorscheme koehler
 endif
 
-" for screen sessions
+" For screen sessions
 if &term == "screen"
   set t_Co=256
 endif
@@ -259,11 +213,7 @@ set statusline+=%{SyntasticStatuslineFlag()}
 
 set statusline+=%*
 
-" and A jsHint config
-let g:js_indent_log = 1
-
-"------------------------------------------------------------
-"
+"--------------------------------------------------------------------
 " Autocompletion
 set ofu=syntaxcomplete#Complete
 
@@ -283,37 +233,26 @@ autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 
 autocmd FileType c set omnifunc=ccomplete#Complete
 
-"disable preview menu, because scratch view is annoying?
+" Disable preview menu, because scratch view is annoying?
 set completeopt =longest,menuone,menu
 
 highlight Pmenu guibg=brown gui=bold
 
 highlight Pmenu ctermbg=238 gui=bold
 
-" remap ctrl-x + ctrl-o to SuperTabfor omnicomplete
+" Remap ctrl-x + ctrl-o to SuperTabfor omnicomplete
 let g:SuperTabDefaultCompletionType = "<C-x><C-o>"
 
-" lets SuperTab decide which completion mode to use and should play well with OmniCompletion
+" Lets SuperTab decide which completion mode to use and should play well with OmniCompletion
 let g:SuperTabDefaultCompletionType = "context"
 
 " When enabled, supertab will attempt to close vim's completion preview window
 " when the completion popup closes (completion is finished or canceled).
 let g:SuperTabClosePreviewOnPopupClose = 1
 
-"----------------------------------------------------------
-" Node-complete
-"
-" add node library to dict
-au FileType javascript set dictionary+=$HOME/.vim/dict/node.dict
-let g:nodejs_complete_config = {'js_compl_fn': 'jscomplete#CompleteJS', 'max_node_compl_len':15}
-"------------------------------------------------------------
+"--------------------------------------------------------------------
 " Misc
 "
-
-"If your having trouble with the backspace character, try uncommenting these
-"imap <C-?> <BS>
-"imap <C-H> <BS>
-"inoremap <BS>
 
 if has("autocmd")
     " Have Vim jump to the last position when reopening a file
@@ -325,19 +264,17 @@ if has("autocmd")
     autocmd FileType c,cpp,java,php,js,css,xml,xsl,s autocmd BufWritePre * :
 endif
 
-" Support for Gundo, a visual & mini tree structure of document changes
-nnoremap <F5> :GundoToggle<CR>
 " Set persistant undo
 set undodir=~/.vim/undodir
 set undofile
 
-" spelling
+" Spelling
 if v:version >= 700
   " Enable spell check for text files
   autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en
 endif
 
-
+" Shows tab number/filename 
 if exists("+showtabline")
      function MyTabLine()
          let s = ''
