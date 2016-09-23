@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Directory containing config files
 CONFIGDIR=~/dotfiles
